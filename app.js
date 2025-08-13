@@ -11,6 +11,8 @@ const wrapAsync = require('./utils/wrapasync.js'); // Utility to handle async er
 const ExpressError = require('./utils/expressError.js'); // Custom error class
 const { listingSchema,reviewSchema } = require('./schema.js'); // Joi schema for listing validation
 const Review = require('./model/review.js'); // Import Mongoose model for reviews
+const listings = require('./routes/listing.js'); // Import listings routes
+const reviews = require('./routes/review.js'); // Import reviews routes
 
 
 // ==========================
@@ -44,27 +46,9 @@ app.get('/', (req, res) => {
     res.send('Hi! I am root'); // Respond to root URL
 });
 
-// ==========================
-// Listings Routes
-// ==========================
 
-// NOTE: Static routes must come before dynamic ones like '/:id'
 
-// Route to render form to create a new listing
-app.get('/listings/new', (req, res) => {
-    res.render('listings/new.ejs'); // Render 'new' EJS view
-});
 
-// Middleware to validate listing data before saving or updating
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body); // Validate req.body using Joi schema
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(', '); // Collect error messages
-        throw new ExpressError(400, errMsg); // Throw custom error with status 400
-    } else {
-        next(); // Continue to next middleware or route handler
-    }
-};
 
 // Middleware to validate review data before saving
 const validateReview = (req, res, next) => {
@@ -77,74 +61,17 @@ const validateReview = (req, res, next) => {
     }
 };
 
-// INDEX - Display all listings
-app.get('/listings', wrapAsync(async (req, res) => {
-    const allListings = await Listing.find({}); // Fetch all listings from DB
-    res.render('listings/index.ejs', { allListings }); // Render 'index' view with listings
-}));
+// ==========================
+// Listings Routes
+// ==========================
 
-// CREATE - Create a new listing in DB
-app.post('/listings', validateListing, wrapAsync(async (req, res, next) => {
-    const newListing = new Listing(req.body.listing); // Create new Listing instance from form data
-    await newListing.save(); // Save to DB
-    res.redirect('/listings'); // Redirect to index page
-}));
+app.use('/listings', listings); // Use listings routes defined in routes/listing.js
 
-// EDIT - Render form to edit an existing listing
-app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
-    const { id } = req.params; // Extract listing ID from URL
-    const listing = await Listing.findById(id); // Find listing by ID
-    if (!listing) throw new ExpressError('Listing not found', 404); // If not found, throw 404 error
-    res.render('listings/edit.ejs', { listing }); // Render 'edit' view with listing data
-}));
-
-// UPDATE - Update existing listing in DB
-app.put('/listings/:id', validateListing, wrapAsync(async (req, res) => {
-    const { id } = req.params; // Extract listing ID from URL
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing }); // Update listing using form data
-    res.redirect(`/listings/${id}`); // Redirect to listing detail page
-}));
-
-// DELETE - Delete a listing
-app.delete('/listings/:id', wrapAsync(async (req, res) => {
-    const { id } = req.params; // Extract listing ID from URL
-    const deletedListing = await Listing.findByIdAndDelete(id); // Delete listing from DB
-    console.log('🗑️ Deleted Listing:', deletedListing); // Log deleted listing
-    res.redirect('/listings'); // Redirect to index page
-}));
-
+// ==========================
 // Reviews Routes
-//Post ROUTE to create a new review for a listing
-app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => {
-   let listing= await  Listing.findById(req.params.id);
-   let newReview=new Review(req.body.review); // Create new review instance from form data
+// ==========================
 
-   listing.reviews.push(newReview); // Add new review to listing's reviews array
-
-    await newReview.save(); // Save new review to DB
-    await listing.save(); // Save updated listing with new review
-
-    res.redirect(`/listings/${listing._id}`); // Redirect to listing detail page
-}))
-
-// SHOW - Display a single listing's details
-// THIS ROUTE MUST COME AFTER STATIC ONES (like '/new' or '/edit')
-app.get('/listings/:id', wrapAsync(async (req, res) => {
-    const { id } = req.params; // Extract listing ID from URL
-    const listing = await Listing.findById(id).populate("reviews"); // Find listing by ID
-    if (!listing) {
-        throw new ExpressError('Listing not found', 404); // Throw 404 if not found
-    }
-    res.render('listings/show.ejs', { listing }); // Render 'show' view with listing data
-}));
-
-// DELETE - Remove a review from a listing
-app.delete('/listings/:id/reviews/:reviewId', wrapAsync(async (req,res) => {
-    const { id, reviewId } = req.params; // Extract listing ID and review ID from URL
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // Remove review from listing's reviews array
-    await Review.findByIdAndDelete(reviewId); // Delete review from DB
-    res.redirect(`/listings/${id}`); // Redirect to listing detail page
-}));
+app.use('/listings/:id/reviews', reviews); // Use reviews routes defined in routes/review.js  
 
 // ==========================
 // Fallback & Error Handling
