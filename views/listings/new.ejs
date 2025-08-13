@@ -1,0 +1,107 @@
+<% layout('layouts/boilerplate') %>
+<!-- 
+    Extends the base layout file 'boilerplate.ejs'.
+    This will insert this content into the layout's content section.
+-->
+
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <!-- Bootstrap row and centered column (8 cols wide, offset by 2) -->
+
+        <h1 class="mb-4">Create a New Listing</h1>
+        <!-- Heading -->
+
+        <!-- 
+            Form to create a new listing.
+            Sends a POST request to /listings with nested form data (e.g., listing[title]).
+            'novalidate' disables browser's default validation.
+            'needs-validation' is a Bootstrap class to apply custom validation styles.
+        -->
+        <form method="POST" action="/listings" novalidate class="needs-validation">
+
+            <!-- ========================= -->
+            <!-- Title Field -->
+            <!-- ========================= -->
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text"
+                       name="listing[title]"
+                       placeholder="Add a catchy title"
+                       class="form-control"
+                       required />
+                <!-- Optional valid-feedback (for client-side validation) -->
+                <div class="valid-feedback">Title looks good!</div>
+            </div>
+
+            <!-- ========================= -->
+            <!-- Description Field -->
+            <!-- ========================= -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="listing[description]"
+                          class="form-control"
+                          required></textarea>
+                <div class="invalid-feedback">Please enter a description.</div>
+            </div>
+
+            <!-- ========================= -->
+            <!-- Image URL Field -->
+            <!-- ========================= -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Image Link</label>
+                <input type="text"
+                       name="listing[image][url]"
+                       placeholder="Image URL/Link"
+                       class="form-control" />
+                <!-- Note: This field is optional as per your schema -->
+            </div>
+
+            <div class="row">
+                <!-- ========================= -->
+                <!-- Price Field -->
+                <!-- ========================= -->
+                <div class="mb-3 col-md-4">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text"
+                           name="listing[price]"
+                           placeholder="1200"
+                           class="form-control"
+                           required />
+                    <div class="invalid-feedback">Please enter a valid price.</div>
+                </div>
+
+                <!-- ========================= -->
+                <!-- Country Field -->
+                <!-- ========================= -->
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text"
+                           name="listing[country]"
+                           placeholder="India"
+                           class="form-control"
+                           required />
+                    <div class="invalid-feedback">Please enter a valid country.</div>
+                </div>
+            </div>
+
+            <!-- ========================= -->
+            <!-- Location Field -->
+            <!-- ========================= -->
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text"
+                       name="listing[location]"
+                       placeholder="Indore, Madhya Pradesh"
+                       class="form-control"
+                       required />
+                <div class="invalid-feedback">Please enter a valid location.</div>
+            </div>
+
+            <!-- ========================= -->
+            <!-- Submit Button -->
+            <!-- ========================= -->
+            <button class="btn btn-dark add-btn mt-3">Create Listing</button>
+        </form>
+
+    </div>
+</div>

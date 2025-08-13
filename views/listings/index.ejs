@@ -1,0 +1,66 @@
+<% layout("layouts/boilerplate") %>
+<!-- 
+    Extends the base layout file 'boilerplate'.
+    Common header, footer, etc. will be inherited.
+-->
+
+<body>
+    <!-- Page Heading -->
+    <h1 class="text-center my-4">All Listings</h1>
+
+    <!-- 
+        Responsive Bootstrap grid:
+        - 3 columns on large screens
+        - 2 columns on medium
+        - 1 column on small
+        - 'g-4' adds gutter spacing between cards
+    -->
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+
+        <!-- 
+            Loop through 'allListings' (array passed from server)
+            Render each listing inside a clickable card
+        -->
+        <% for (let listing of allListings) { %>
+
+            <!-- 
+                Entire card is wrapped in an anchor tag
+                Clicking the card redirects to that listing's detail page
+            -->
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+                
+                <div class="card col listing-card h-100 shadow-sm">
+                    <!-- 
+                        Image section:
+                        - Checks if listing.image.url exists
+                        - If not, uses a placeholder image
+                        - Fixed height (20rem) and 'object-fit: cover' to crop nicely
+                    -->
+                    <img 
+                        src="<%= (listing.image && listing.image.url) ? listing.image.url : 'https://via.placeholder.com/400x300?text=No+Image' %>"
+                        class="card-img-top"
+                        alt="Listing Image"
+                        style="height: 20rem; object-fit: cover;">
+
+                    <!-- 
+                        Empty overlay (optional):
+                        You can add hover effects or overlays here if needed
+                    -->
+                    <div class="card-img-overlay"></div>
+
+                    <!-- 
+                        Card body:
+                        Displays title and price
+                    -->
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= listing.title %></b><br> <!-- Bold title -->
+                            ₹ <%= listing.price.toLocaleString('en-IN') %> / Night <!-- Indian formatted price -->
+                        </p>
+                    </div>
+                </div>
+            </a>
+
+        <% } %>
+    </div>
+</body>

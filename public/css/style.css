@@ -1,0 +1,151 @@
+/* ----------------------------------- */
+/* Global Styles - Body & Container    */
+/* ----------------------------------- */
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important; /* Sets the main font */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Makes sure the body covers full screen height */
+}
+
+.container {
+  flex: 1; /* Allows the container to expand and fill space between navbar and footer */
+  padding: 2rem;
+}
+
+/* ----------------------------------- */
+/* Navbar Styles                       */
+/* ----------------------------------- */
+
+.navbar {
+  height: 5rem;
+  background-color: white; /* White navbar background */
+}
+
+.fa-compass {
+  color: #fe424d; /* Brand icon color */
+  font-size: 2.25rem;
+}
+
+.nav-link {
+  color: #222222 !important; /* Dark link color */
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+/* ----------------------------------- */
+/* Footer Styles                       */
+/* ----------------------------------- */
+
+.f-info {
+  text-align: center;
+  background-color: #ebebeb;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  gap: 0.5rem; /* Vertical spacing */
+  align-items: center;
+}
+
+.f-info-socials i {
+  margin-right: 1rem; /* Space between icons */
+  font-size: 1.5rem;
+}
+
+.f-info-links a {
+  text-decoration: none;
+  color: #222222;
+  margin: 0 0.5rem; /* Horizontal spacing */
+}
+
+.f-info-links a:hover {
+  text-decoration: underline; /* Hover effect for links */
+}
+
+/* ----------------------------------- */
+/* Card Styles                         */
+/* ----------------------------------- */
+
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem; /* Space between cards */
+}
+
+.card-img-top {
+  border-radius: 1rem !important; /* Rounded image corners */
+  width: 100% !important;
+  object-fit: cover !important; /* Ensures image covers area without distortion */
+}
+
+.card-body {
+  padding: 1.5rem !important;
+}
+
+.card-text p {
+  font-weight: 400 !important; /* Regular weight for card text */
+}
+
+/* ----------------------------------- */
+/* Card Hover Effect                   */
+/* ----------------------------------- */
+
+.card-img-overlay {
+  opacity: 0; /* Initially transparent */
+}
+
+.card-img-overlay:hover {
+  opacity: 0.2; /* Light overlay on hover */
+  background-color: white;
+}
+
+/* ----------------------------------- */
+/* Add Listing Button (New Page)       */
+/* ----------------------------------- */
+
+.add-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* ----------------------------------- */
+/* Edit Button (Edit Page)             */
+/* ----------------------------------- */
+
+.edit-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* ----------------------------------- */
+/* Show Page Styles                    */
+/* ----------------------------------- */
+
+.show-img {
+  height: 30vh; /* Responsive image height */
+}
+
+.btns {
+  background-color: #fe424d !important;
+  border: none !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+
+
+
+.show-card {
+  padding-left: 0;
+  padding-right: 0;
+}

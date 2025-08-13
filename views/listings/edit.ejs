@@ -1,0 +1,116 @@
+<% layout("layouts/boilerplate") %>
+<!-- 
+    Extends the 'boilerplate' layout which includes HTML <head>, navbar, etc.
+-->
+
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+        <!-- Bootstrap grid: 8-column width, centered with offset -->
+
+        <h1>Edit Your Listing</h1>
+        <!-- Page heading -->
+
+        <!-- 
+            Form to update an existing listing.
+            - Uses method override (?_method=PUT) since HTML forms don't support PUT directly.
+            - Action URL includes listing ID to identify which listing to update.
+            - 'novalidate' disables default browser validation.
+            - 'needs-validation' is a Bootstrap class for custom validation styling.
+        -->
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
+
+            <!-- ======================= -->
+            <!-- Title Field -->
+            <!-- ======================= -->
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input 
+                    type="text" 
+                    name="listing[title]" 
+                    value="<%= listing.title %>" 
+                    class="form-control" 
+                    required>
+                <div class="valid-feedback">Title looks good!</div>
+            </div>
+
+            <!-- ======================= -->
+            <!-- Description Field -->
+            <!-- ======================= -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea 
+                    name="listing[description]" 
+                    class="form-control" 
+                    required><%= listing.description %></textarea>
+                <div class="invalid-feedback">Please enter a description.</div>
+            </div>
+
+            <div class="row">
+                <!-- ======================= -->
+                <!-- Price Field -->
+                <!-- ======================= -->
+                <div class="mb-3 col-md-4">
+                    <label for="price" class="form-label">Price</label>
+                    <input 
+                        type="number" 
+                        name="listing[price]" 
+                        value="<%= listing.price %>" 
+                        class="form-control" 
+                        required>
+                    <div class="invalid-feedback">Please enter a valid price.</div>
+                </div>
+
+                <!-- ======================= -->
+                <!-- Country Field -->
+                <!-- ======================= -->
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">Country</label>
+                    <input 
+                        type="text" 
+                        name="listing[country]" 
+                        value="<%= listing.country %>" 
+                        class="form-control" 
+                        required>
+                    <div class="invalid-feedback">Please enter a valid country.</div>
+                </div>
+            </div>
+
+            <!-- ======================= -->
+            <!-- Image URL Field -->
+            <!-- ======================= -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Image Link</label>
+                <input 
+                    type="text" 
+                    name="listing[image][url]" 
+                    value="<%= listing.image.url %>" 
+                    class="form-control" 
+                    required>
+            </div>
+
+            <!-- ======================= -->
+            <!-- Location Field -->
+            <!-- ======================= -->
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input 
+                    type="text" 
+                    name="listing[location]" 
+                    value="<%= listing.location %>" 
+                    class="form-control" 
+                    required>
+                <div class="invalid-feedback">Please enter a valid location.</div>
+            </div>
+
+            <!-- ======================= -->
+            <!-- Submit Button -->
+            <!-- ======================= -->
+            <button class="btn btn-dark edit-btn mt-3">Update Listing</button>
+        </form>
+    </div>
+</div>
+
+<!-- ======================= -->
+<!-- Optional: Custom JS for client-side validation or interactivity -->
+<!-- ======================= -->
+
