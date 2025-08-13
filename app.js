@@ -5,12 +5,8 @@ const express = require('express'); // Import Express framework
 const mongoose = require('mongoose'); // MongoDB object modeling tool
 const path = require('path'); // Utility for working with file and directory paths
 const methodOverride = require('method-override'); // Allows using HTTP verbs like PUT or DELETE
-const Listing = require('./model/listing.js'); // Import Mongoose model for listings
 const ejsMate = require('ejs-mate'); // Template engine to support layouts and partials in EJS
-const wrapAsync = require('./utils/wrapasync.js'); // Utility to handle async errors
 const ExpressError = require('./utils/expressError.js'); // Custom error class
-const { listingSchema,reviewSchema } = require('./schema.js'); // Joi schema for listing validation
-const Review = require('./model/review.js'); // Import Mongoose model for reviews
 const listings = require('./routes/listing.js'); // Import listings routes
 const reviews = require('./routes/review.js'); // Import reviews routes
 
@@ -45,21 +41,6 @@ main()
 app.get('/', (req, res) => {
     res.send('Hi! I am root'); // Respond to root URL
 });
-
-
-
-
-
-// Middleware to validate review data before saving
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body); // Validate req.body using Joi schema
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(', '); // Collect error messages
-        throw new ExpressError(400, errMsg); // Throw custom error with status 400
-    } else {
-        next(); // Continue to next middleware or route handler
-    }
-};
 
 // ==========================
 // Listings Routes

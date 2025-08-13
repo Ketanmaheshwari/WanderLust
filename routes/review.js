@@ -4,9 +4,23 @@
 
 const express = require('express');
 const router = express.Router();
-const wrapAsync = require('./utils/wrapasync.js'); // Utility to handle async errors
-const ExpressError = require('./utils/expressError.js'); // Custom error class
+const wrapAsync = require('../utils/wrapasync.js'); // Utility to handle async errors
+const ExpressError = require('../utils/expressError.js'); // Custom error class
+const {reviewSchema } = require('../schema.js'); // Joi schema for listing validation
+const Review = require('../model/review.js'); // Import Mongoose model for reviews
+const Listing = require('../model/listing.js'); // Import Mongoose model for listings
 
+
+// Middleware to validate review data before saving
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body); // Validate req.body using Joi schema
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(', '); // Collect error messages
+        throw new ExpressError(400, errMsg); // Throw custom error with status 400
+    } else {
+        next(); // Continue to next middleware or route handler
+    }
+};
 
 //Post ROUTE to create a new review for a listing
 
