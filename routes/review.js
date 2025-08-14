@@ -3,7 +3,7 @@
 // ==========================
 
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true }); // Enable merging of params from parent route
 const wrapAsync = require('../utils/wrapasync.js'); // Utility to handle async errors
 const ExpressError = require('../utils/expressError.js'); // Custom error class
 const {reviewSchema } = require('../schema.js'); // Joi schema for listing validation

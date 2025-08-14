@@ -6,7 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const wrapAsync = require('../utils/wrapasync.js'); // Utility to handle async errors
-const { listingSchema,reviewSchema } = require('../schema.js'); // Joi schema for listing validation
+const { listingSchema} = require('../schema.js'); // Joi schema for listing validation
 const ExpressError = require('../utils/expressError.js'); // Custom error class
 const Listing = require('../model/listing.js'); // Import Mongoose model for listings
 
