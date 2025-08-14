@@ -7,13 +7,15 @@ const path = require('path'); // Utility for working with file and directory pat
 const methodOverride = require('method-override'); // Allows using HTTP verbs like PUT or DELETE
 const ejsMate = require('ejs-mate'); // Template engine to support layouts and partials in EJS
 const ExpressError = require('./utils/expressError.js'); // Custom error class
-const listings = require('./routes/listing.js'); // Import listings routes
-const reviews = require('./routes/review.js'); // Import reviews routes
+
 const session = require('express-session'); // Session management middleware
 const flash = require('connect-flash'); // Flash messages middleware
 const passport=require('passport'); // Authentication middleware
 const LocalStrategy = require('passport-local'); // Local authentication strategy
 const User = require('./model/user.js'); // User model for authentication
+const listingRouter = require('./routes/listing.js'); // Import listings routes
+const reviewRouter = require('./routes/review.js'); // Import reviews routes
+const userRouter = require('./routes/user.js'); // Import user routes
 
 
 // ==========================
@@ -66,14 +68,14 @@ app.use((req, res, next) => {
     next(); // Continue to next middleware
 });
 
-app.get('/demouser',async (req, res) => {
-    let fakeUser= new User({
-        email: 'student@gmail.com',
-        username: 'delta-student',
-    });
-        let registeredUser =  await User.register(fakeUser, 'password123') // Register a fake user for demonstration
-        res.send(registeredUser); // Send registered user details as response
-});
+// app.get('/demouser',async (req, res) => {
+//     let fakeUser= new User({
+//         email: 'student@gmail.com',
+//         username: 'delta-student',
+//     });
+//         let registeredUser =  await User.register(fakeUser, 'password123') // Register a fake user for demonstration
+//         res.send(registeredUser); // Send registered user details as response
+// });
 
 
 
@@ -93,13 +95,19 @@ main()
 // Listings Routes
 // ==========================
 
-app.use('/listings', listings); // Use listings routes defined in routes/listing.js
+app.use('/listings', listingRouter); // Use listings routes defined in routes/listing.js
 
 // ==========================
 // Reviews Routes
 // ==========================
 
-app.use('/listings/:id/reviews', reviews); // Use reviews routes defined in routes/review.js  
+app.use('/listings/:id/reviews', reviewRouter); // Use reviews routes defined in routes/review.js  
+
+// ==========================
+// User Routes
+// ==========================
+
+app.use('/', userRouter); // Use user routes defined in routes/user.js
 
 // ==========================
 // Fallback & Error Handling
