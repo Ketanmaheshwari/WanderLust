@@ -11,6 +11,7 @@ const Review = require('../model/review.js'); // Import Mongoose model for revie
 const Listing = require('../model/listing.js'); // Import Mongoose model for listings
 
 
+
 // Middleware to validate review data before saving
 const validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body); // Validate req.body using Joi schema
@@ -33,6 +34,8 @@ router.post('/', validateReview, wrapAsync(async (req, res) => {
     await newReview.save(); // Save new review to DB
     await listing.save(); // Save updated listing with new review
 
+    req.flash('success', 'New Review created successfully!'); // Flash success message
+
     res.redirect(`/listings/${listing._id}`); // Redirect to listing detail page
 }))
 
@@ -41,6 +44,7 @@ router.delete('/:reviewId', wrapAsync(async (req,res) => {
     const { id, reviewId } = req.params; // Extract listing ID and review ID from URL
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // Remove review from listing's reviews array
     await Review.findByIdAndDelete(reviewId); // Delete review from DB
+    req.flash('success', 'Review Deleted!'); // Flash success message
     res.redirect(`/listings/${id}`); // Redirect to listing detail page
 }));
 
