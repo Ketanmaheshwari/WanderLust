@@ -11,6 +11,9 @@ const listings = require('./routes/listing.js'); // Import listings routes
 const reviews = require('./routes/review.js'); // Import reviews routes
 const session = require('express-session'); // Session management middleware
 const flash = require('connect-flash'); // Flash messages middleware
+const passport=require('passport'); // Authentication middleware
+const LocalStrategy = require('passport-local'); // Local authentication strategy
+const User = require('./model/user.js'); // User model for authentication
 
 
 // ==========================
@@ -50,12 +53,29 @@ app.get('/', (req, res) => {
 app.use(session(sessionOptions)); // Initialize session middleware
 app.use(flash()); // Initialize flash messages middleware
 
+app.use(passport.initialize()); // Initialize Passport for authentication
+app.use(passport.session()); // Use Passport session management
+
+passport.use(new LocalStrategy(User.authenticate())); // Use local strategy for authentication
+passport.serializeUser(User.serializeUser()); // Serialize user for session
+passport.deserializeUser(User.deserializeUser()); // Deserialize user from session
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success'); // Make flash success messages available in views
     res.locals.error = req.flash('error'); // Make flash error messages available in views
     next(); // Continue to next middleware
 });
+
+app.get('/demouser',async (req, res) => {
+    let fakeUser= new User({
+        email: 'student@gmail.com',
+        username: 'delta-student',
+    });
+        let registeredUser =  await User.register(fakeUser, 'password123') // Register a fake user for demonstration
+        res.send(registeredUser); // Send registered user details as response
+});
+
+
 
 // ==========================
 // Connect to MongoDB
