@@ -65,6 +65,7 @@ passport.deserializeUser(User.deserializeUser()); // Deserialize user from sessi
 app.use((req, res, next) => {
     res.locals.success = req.flash('success'); // Make flash success messages available in views
     res.locals.error = req.flash('error'); // Make flash error messages available in views
+    res.locals.currUser = req.user; // Make current user available in views
     next(); // Continue to next middleware
 });
 

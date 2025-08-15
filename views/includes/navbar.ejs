@@ -31,6 +31,22 @@
         <a class="nav-link" href="/listings/new">Add new listing</a>
 
       </div>
+       <div class="navbar-nav ms-auto"> <!-- Right-aligned links -->
+        <!-- Conditional rendering based on user authentication -->
+        <% if (!currUser) { %>
+        <!-- Home link -->
+        <a class="nav-link" href="/signup">Sign Up</a>
+
+        <!-- Link to show all listings -->
+        <a class="nav-link" href="/login">Login</a>
+        <% } %>
+         <% if (currUser) { %>
+        <!-- Link to the "Add new listing" form -->
+        <a class="nav-link" href="/logout">Logout</a>
+        <%}%>
+
+      </div>
+
     </div>
   </div>
 </nav>

@@ -16,11 +16,12 @@
 
         <div class="card-body">
             <!-- Display listing title, description, price, location, and country -->
-            <p class="card-text">
-                <%= listing.description %><br>  <!-- Description -->
-                ₹ <%= listing.price.toLocaleString('en-IN') %> <br> <!-- Price formatted for Indian locale -->
-                <%= listing.location %><br>     <!-- Location -->
-                <%= listing.country %>          <!-- Country -->
+            <p class="card-text"> Owned by: <i><%=listing.owner.username%></i><br> </p>
+              
+                <p class="card-text"> <%= listing.description %> <!-- Description --></p>
+              <p class="card-text">  ₹ <%= listing.price.toLocaleString('en-IN') %> <br></p> <!-- Price formatted for Indian locale -->
+              <p class="card-text">   <%= listing.location %>    <!-- Location --></p>
+               <p class="card-text">  <%= listing.country %>          <!-- Country --></p>
             </p>
         </div>
     </div>
@@ -30,6 +31,7 @@
     <!-- ===================== -->
     <!-- Edit and Delete Buttons -->
     <!-- ===================== -->
+    
     <div class="col-1 offset-3">
         <!-- Edit button: links to edit page for this listing -->
         <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark btns">Edit</a>
