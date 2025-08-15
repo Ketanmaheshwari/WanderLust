@@ -1,6 +1,7 @@
 const Listing = require('./model/listing'); // Import Listing model
 const { listingSchema,reviewSchema} = require('./schema.js'); // Joi schema for listing validation
 const ExpressError = require('./utils/expressError.js'); // Custom error class
+const Review = require('./model/review.js'); // Import Mongoose model for reviews
 
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -52,3 +53,13 @@ module.exports.validateReview = (req, res, next) => {
         next(); // Continue to next middleware or route handler
     }
 };
+
+module.exports.isReviewAuthor= async (req, res, next) => {  
+let { id,reviewId } = req.params; // Extract listing ID from URL
+    let review=await Review.findById(reviewId);
+    if(!review.author.equals(res.locals.currUser._id)){
+        req.flash('error', 'You did not create this review'); // Flash error if user is not owner
+        return res.redirect(`/listings/${id}`); // Redirect to listing detail page
+    }
+    next(); // Continue to next middleware if user is owner 
+}
