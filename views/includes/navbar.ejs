@@ -1,9 +1,27 @@
+<style>
+  .btn-search {
+    background-color: #fe424d; /* Bootstrap primary color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    padding: 0 1rem 0 1rem; /* Padding for button */
+    border-radius: 25px; /* Rounded corners */
+  }
+  .btn-search:hover {
+   background-color: #fe424d; /* Bootstrap primary color */
+    color: white; /* Text color */
+  }
+  .btn-search i {
+   display:inline;
+   margin-right:0.5rem
+  }
+</style>
+
 <!-- Navbar using Bootstrap classes -->
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid"> <!-- Full-width container -->
 
     <!-- Brand logo or name linking to homepage -->
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/listings">
       <i class="fa-regular fa-compass"></i> <!-- Font Awesome compass icon -->
     </a>
 
@@ -21,28 +39,32 @@
       <!-- Navigation links aligned horizontally -->
       <div class="navbar-nav">
 
-        <!-- Home link -->
-        <a class="nav-link" href="/">Home</a>
-
         <!-- Link to show all listings -->
-        <a class="nav-link" href="/listings">All listings</a>
+        <a class="nav-link" href="/listings">Explore</a>
 
-        <!-- Link to the "Add new listing" form -->
-        <a class="nav-link" href="/listings/new">Add new listing</a>
+      
 
       </div>
+      <div class="navbar-nav ms-auto"> <!-- Right-aligned links -->
+         <form class="d-flex" role="search">
+      <input class="form-control me-2" type="search" placeholder="Search Destination" aria-label="Search"/>
+      <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+    </form>
+      </div>
        <div class="navbar-nav ms-auto"> <!-- Right-aligned links -->
+          <!-- Link to the "Add new listing" form -->
+        <a class="nav-link" href="/listings/new">Airbnb your home</a>
         <!-- Conditional rendering based on user authentication -->
         <% if (!currUser) { %>
         <!-- Home link -->
-        <a class="nav-link" href="/signup">Sign Up</a>
+        <a class="nav-link" href="/signup"><b>Sign Up</b></a>
 
         <!-- Link to show all listings -->
-        <a class="nav-link" href="/login">Login</a>
+        <a class="nav-link" href="/login"><b>Login</b></a>
         <% } %>
          <% if (currUser) { %>
         <!-- Link to the "Add new listing" form -->
-        <a class="nav-link" href="/logout">Logout</a>
+        <a class="nav-link" href="/logout"><b>Logout</b></a>
         <%}%>
 
       </div>

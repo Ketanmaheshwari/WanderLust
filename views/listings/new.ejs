@@ -17,7 +17,7 @@
             'novalidate' disables browser's default validation.
             'needs-validation' is a Bootstrap class to apply custom validation styles.
         -->
-        <form method="POST" action="/listings" novalidate class="needs-validation">
+        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
 
             <!-- ========================= -->
             <!-- Title Field -->
@@ -48,11 +48,11 @@
             <!-- Image URL Field -->
             <!-- ========================= -->
             <div class="mb-3">
-                <label for="image" class="form-label">Image Link</label>
-                <input type="text"
+                <label for="image" class="form-label">Upload Listing Image </label>
+                <input type="file"
                        name="listing[image][url]"
-                       placeholder="Image URL/Link"
-                       class="form-control" />
+                       class="form-control" 
+                       required />
                 <!-- Note: This field is optional as per your schema -->
             </div>
 

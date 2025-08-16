@@ -6,13 +6,23 @@ const passport = require('passport'); // Authentication middleware
 const { saveRedirectUrl } = require('../middleware.js');
 const userController = require('../controllers/users.js'); // Import user controller functions
 
-router.get('/signup', userController.renderSignupForm); // Render signup form
+router
+.route('/signup')
 
-router.post('/signup', wrapasync(userController.signup)); // Handle user signup
+.get( userController.renderSignupForm) // Render signup form
 
-router.get('/login',userController.renderLoginForm); // Render login form
+.post( wrapasync(userController.signup)); // Handle user signup
 
-router.post('/login',saveRedirectUrl, passport.authenticate("local",{failureRedirect:'/login',failureFlash:true}),userController.login); // Handle user login with passport authentication
+
+router
+.route('/login')
+
+.get(userController.renderLoginForm) // Render login form
+
+.post(saveRedirectUrl, passport.authenticate("local",{
+    failureRedirect:'/login',failureFlash:true})
+    ,userController.login); // Handle user login with passport authentication
+
 
 router.get('/logout', userController.logout); // Handle user logout
 module.exports = router; // Export the router for use in app.js

@@ -1,6 +1,11 @@
 // ==========================
 // Required Modules
 // ==========================
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config(); // Load environment variables from .env file
+} // Load environment variables from .env file in development mode
+
+
 const express = require('express'); // Import Express framework
 const mongoose = require('mongoose'); // MongoDB object modeling tool
 const path = require('path'); // Utility for working with file and directory paths
@@ -9,6 +14,7 @@ const ejsMate = require('ejs-mate'); // Template engine to support layouts and p
 const ExpressError = require('./utils/expressError.js'); // Custom error class
 
 const session = require('express-session'); // Session management middleware
+const MongoDBStore = require('connect-mongo'); // Store sessions in MongoDB
 const flash = require('connect-flash'); // Flash messages middleware
 const passport=require('passport'); // Authentication middleware
 const LocalStrategy = require('passport-local'); // Local authentication strategy
@@ -22,7 +28,8 @@ const userRouter = require('./routes/user.js'); // Import user routes
 // App Configuration
 // ==========================
 const app = express(); // Initialize Express app
-const mongoURL = 'mongodb://localhost:27017/wanderlust'; // MongoDB connection string
+//const mongoURL = 'mongodb://localhost:27017/wanderlust'; // MongoDB connection string
+const dbUrl = process.env.ATLASDB_URL; // MongoDB connection string, using environment variable or default to local MongoDB
 
 app.engine('ejs', ejsMate); // Set ejsMate as template engine
 app.set('view engine', 'ejs'); // Set EJS as default view engine
@@ -32,8 +39,21 @@ app.use(express.static(path.join(__dirname, '/public'))); // Serve static files 
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (form data)
 app.use(methodOverride('_method')); // Support method override for PUT/DELETE in forms
 
+
+const store=MongoDBStore.create({
+    mongoUrl: dbUrl, // MongoDB connection string
+    crypto:{ secret: process.env.SECRET} ,// Secret key for session encryption
+   
+    touchAfter: 24 * 3600 // Time in seconds after which session is updated
+});
+
+store.on('error', function(e) {
+    console.error('Session Store Error:', e); // Log any errors with the session store
+});
+
 const sessionOptions = {
-    secret: 'mysupersecretcode', // Secret key for session encryption
+    store: store, // Use MongoDBStore for session storage
+    secret: process.env.SECRET, // Secret key for session encryption
     resave: false, // Don't save session if unmodified
     saveUninitialized: true, // Save new session if not initialized
     cookie: {
@@ -47,9 +67,11 @@ const sessionOptions = {
 // ==========================
 // Root Route
 // ==========================
-app.get('/', (req, res) => {
-    res.send('Hi! I am root'); // Respond to root URL
-});
+// app.get('/', (req, res) => {
+//     res.send('Hi! I am root'); // Respond to root URL
+// });
+
+
 
 
 app.use(session(sessionOptions)); // Initialize session middleware
@@ -84,7 +106,7 @@ app.use((req, res, next) => {
 // Connect to MongoDB
 // ==========================
 async function main() {
-    await mongoose.connect(mongoURL); // Connect to MongoDB
+    await mongoose.connect(dbUrl); // Connect to MongoDB
 }
 main()
     .then(() => console.log('✅ Connected to MongoDB'))

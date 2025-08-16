@@ -30,8 +30,11 @@ module.exports.showListing=async (req, res) => {
 }   
 
 module.exports.createListing = async (req, res, next) => {
+    let url=req.file.path;
+    let filename=req.file.filename;
     const newListing = new Listing(req.body.listing); // Create new Listing instance from form data
     newListing.owner = req.user._id; // Set the owner of the listing to the currently logged-in user 
+    newListing.image = { url, filename }; // Set image URL and filename
     await newListing.save(); // Save to DB
     req.flash('success', 'New listing created successfully!'); // Flash success message
     res.redirect('/listings'); // Redirect to index page
@@ -45,12 +48,21 @@ module.exports.renderEditForm =async (req, res) => {
         return res.redirect('/listings'); // Redirect to index page if not found
     }
     if (!listing) throw new ExpressError('Listing not found', 404); // If not found, throw 404 error
-    res.render('listings/edit.ejs', { listing }); // Render 'edit' view with listing data
+
+    let originalImageUrl=listing.image.url;
+    originalImageUrl=originalImageUrl.replace('/upload', '/upload/w_300,h_200,'); // Modify URL for display
+    res.render('listings/edit.ejs', { listing ,originalImageUrl}); // Render 'edit' view with listing data
 }
 
 module.exports.updateListing = async (req, res) => {
     let { id } = req.params; // Extract listing ID from URL
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing }); // Update listing using form data
+    let listing=await Listing.findByIdAndUpdate(id, { ...req.body.listing }); // Update listing using form data
+    if(typeof req.file!=="undifined"){ // Check if a new file was uploaded{
+       let url=req.file.path;
+    let filename=req.file.filename;
+    listing.image = { url, filename }; // Update image URL and filename
+    await listing.save(); // Save updated listing to DB
+    }
     req.flash('success', 'Listing Updated!'); // Flash success message
     res.redirect(`/listings/${id}`); // Redirect to listing detail page
 }

@@ -7,8 +7,94 @@
 
 
 <body>
+
+    <style>
+        #filters {
+           display: flex;
+           flex-wrap:wrap;
+           /* align-items: center; */
+        }
+
+        .filter {
+            text-align: center;
+            margin-right: 1.5rem;
+            opacity: 0.7;
+        }
+
+        .filter:hover {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .tax-info {
+            display:none;
+        }
+
+        .tax-toggle {
+            border:1px solid black;
+            border-radius:1rem;
+            height:3.5rem;
+            padding:1rem;
+            margin-left: 3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+    </style>
     <!-- Page Heading -->
-    <h1 class="text-center my-4">All Listings</h1>
+    <!-- <h1 class="text-center my-4">All Listings</h1> -->
+     <div id="filters">
+        <div class="filter">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-mountain-city"></i></div>
+        <p>Iconic cities</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-mountain-sun"></i></div>
+        <p>Mountains</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Amazing Pools</p>
+        </div>
+         <div class="filter">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-tractor"></i></div>
+        <p>Farms</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-snowflake"></i></div>
+        <p> Artic</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-landmark-dome"></i></div>
+        <p>Domes</p>
+        </div>
+        <div class="filter">
+        <div><i class="fa-solid fa-umbrella-beach"></i></div>
+        <p> Beach</p>
+        </div>
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+  <label class="form-check-label" for="switchCheckDefault">Display total before taxes</label>
+</div>
+        </div>
+     </div>
 
     <!-- 
         Responsive Bootstrap grid:
@@ -17,7 +103,7 @@
         - 1 column on small
         - 'g-4' adds gutter spacing between cards
     -->
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-2">
 
         <!-- 
             Loop through 'allListings' (array passed from server)
@@ -39,7 +125,7 @@
                         - Fixed height (20rem) and 'object-fit: cover' to crop nicely
                     -->
                     <img 
-                        src="<%= (listing.image && listing.image.url) ? listing.image.url : 'https://via.placeholder.com/400x300?text=No+Image' %>"
+                        src="<%=listing.image.url %>"
                         class="card-img-top"
                         alt="Listing Image"
                         style="height: 20rem; object-fit: cover;">
@@ -58,6 +144,7 @@
                         <p class="card-text">
                             <b><%= listing.title %></b><br> <!-- Bold title -->
                             ₹ <%= listing.price.toLocaleString('en-IN') %> / Night <!-- Indian formatted price -->
+                            <i class='tax-info'> &nbsp;&nbsp; +18% GST</i>
                         </p>
                     </div>
                 </div>
@@ -66,3 +153,18 @@
         <% } %>
     </div>
 </body>
+<script>
+    let taxSwitch = document.getElementById("switchCheckDefault");
+
+    taxSwitch.addEventListener("change", () => {   // use "change" for checkbox
+        let taxInfo = document.getElementsByClassName("tax-info"); // ✅ store in variable
+
+        for (let info of taxInfo) {
+            if (taxSwitch.checked) {               // ✅ show when checked
+                info.style.display = "inline";
+            } else {                               // ✅ hide when unchecked
+                info.style.display = "none";
+            }
+        }
+    });
+</script>
